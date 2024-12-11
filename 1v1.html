@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mr Mcalpine Battleships Game</title>
+    <style>
+        body, html {
+            margin: 0;
+            padding: 0;
+            height: 100%;
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            background-color: rgb(171, 171, 171);
+        }
+
+        .container {
+            width: 100%;
+            max-width: 600px;
+        }
+
+        h1 {
+            font-size: 36px;
+            margin-bottom: 20px;
+        }
+
+        .grid-container {
+            display: grid;
+            grid-template-columns: repeat(10, 50px);
+            grid-template-rows: repeat(10, 50px);
+            gap: 2px;
+        }
+
+        .grid-item {
+            background-color: lightblue;
+            border: 1px solid #ddd;
+            width: 50px;
+            height: 50px;
+            cursor: pointer;
+        }
+
+        .grid-item.hit {
+            background-color: lightcoral;
+        }
+
+        .grid-item.miss {
+            background-color: lightgray;
+        }
+
+        .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+
+        .restart {
+            cursor: pointer;
+            color: blue;
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="container">
+        <h1>Battleships</h1>
+        <div class="grid-container" id="grid">
+        </div>
+        <div class="stats">
+            <p id="tries">Tries: 0</p>
+            <p class="restart" onclick="restartGame()">Restart Game</p>
+        </div>
+        <p id="message"></p>
+    </div>
+
+    <script>
+        let gridContainer = document.getElementById('grid');
+        let messageElement = document.getElementById('message');
+        let triesElement = document.getElementById('tries');
+
+        const gridSize = 10;
+        let shipPositions = new Set();
+        let hits = 0;
+        let tries = 0;
+
+        const shipLengths = [3, 3, 2, 2, 1];
+
+        function isValidPosition(start, length, direction) {
+            for (let i = 0; i < length; i++) {
+                const position = direction === 'horizontal' ? start + i : start + i * gridSize;
+                if (shipPositions.has(position) || position >= gridSize * gridSize || (direction === 'horizontal' && Math.floor(start / gridSize) !== Math.floor((start + i) / gridSize))) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function placeShips() {
+            shipPositions.clear();
+
+            for (const length of shipLengths) {
+                let placed = false;
+
+                while (!placed) {
+                    const start = Math.floor(Math.random() * gridSize * gridSize);
+                    const direction = Math.random() < 0.5 ? 'horizontal' : 'vertical';
+
+                    if (isValidPosition(start, length, direction)) {
+                        for (let i = 0; i < length; i++) {
+                            const position = direction === 'horizontal' ? start + i : start + i * gridSize;
+                            shipPositions.add(position);
+                        }
+                        placed = true;
+                    }
+                }
+            }
+        }
+        function createGrid() {
+            gridContainer.innerHTML = '';
+            for (let i = 0; i < gridSize * gridSize; i++) {
+                const cell = document.createElement('div');
+                cell.classList.add('grid-item');
+                cell.dataset.index = i;
+
+                cell.addEventListener('click', () => {
+                    if (cell.classList.contains('hit') || cell.classList.contains('miss')) {
+                        messageElement.textContent = 'You already clicked this cell!';
+                        return;
+                    }
+
+                    tries++;
+                    triesElement.textContent = `Tries: ${tries}`;
+
+                    if (shipPositions.has(Number(cell.dataset.index))) {
+                        cell.classList.add('hit');
+                        hits++;
+                        messageElement.textContent = `Hit! ${shipPositions.size - hits} parts remaining.`;
+
+                        if (hits === shipPositions.size) {
+                            messageElement.textContent = `You sank all the ships in ${tries} tries! Game over!`;
+                        }
+                    } else {
+                        cell.classList.add('miss');
+                        messageElement.textContent = 'Miss! Try again.';
+                    }
+                });
+
+                gridContainer.appendChild(cell);
+            }
+        }
+        function restartGame() {
+            hits = 0;
+            tries = 0;
+            triesElement.textContent = `Tries: ${tries}`;
+            messageElement.textContent = '';
+            placeShips();
+            createGrid();
+        }
+        placeShips();
+        createGrid();
+    </script>
+
+</body>
+</html>

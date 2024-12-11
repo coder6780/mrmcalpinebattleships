@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Play Battleships</title>
+</head>
+<style>
+ h1{
+    font-size: 36px;
+    margin-bottom: 20px;
+    font-family: 'Courier New', monospace;
+    text-align: center;
+ }
+ body {
+    background-color: rgb(171, 171, 171);
+ }
+ @import url('https://fonts.googleapis.com/css?family=Lato:100&display=swap');
+
+body, html {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  background-color: rgb(171, 171, 171);
+  overflow: hidden;
+  font-family: 'Courier New', monospace;
+}
+
+.container {
+  width: 800px;
+  height: 800px;
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.center {
+  width: 180px;
+  height: 60px;
+  position: absolute;
+}
+
+.btn {
+  width: 180px;
+  height: 60px;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid #3f3f3f;
+  outline: none;
+  transition: 1s ease-in-out;
+}
+
+svg {
+  position: absolute;
+  left: 0;
+  top: 0;
+  fill: none;
+  stroke: #fff;
+  stroke-dasharray: 150 480;
+  stroke-dashoffset: 150;
+  transition: 1s ease-in-out;
+}
+
+.btn:hover {
+  transition: 1s ease-in-out;
+  background: #9b9b9b;
+}
+
+.btn:hover svg {
+  stroke-dashoffset: -480;
+}
+
+.btn span {
+  color: white;
+  font-size: 20x;
+  font-weight: 100;
+}
+</style>
+<body>
+    <body>
+        <h1>Mr Mcalpine Battle Ships</h1>
+        <div class="container">
+            <div class="center">
+              <a href="1v1.html" target="_blank" style="text-decoration: none;">
+                <button class="btn">
+                  <svg width="180px" height="60px" viewBox="0 0 180 60" class="border">
+                    <polyline points="179,1 179,59 1,59 1,1 179,1" class="bg-line" />
+                    <polyline points="179,1 179,59 1,59 1,1 179,1" class="hl-line" />
+                  </svg>
+                  <span>Play</span>
+                </button>
+              </a>
+            </div>
+          </div>
+    </body>
+    
+    
+</body>
+</html>
